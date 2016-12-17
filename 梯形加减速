@@ -1,0 +1,68 @@
+	#define POS_deadsiz 5
+  #define V_deadsize 5
+  double Delta_timeime;
+  double Delta_time;
+if(new_cmd.Request)
+  {
+	cout<<"position:"<<axis1_setpoint.Position<<" Velocity"<<axis1_setpoint.Velocity<<"at time"<<(double)now / 1000000000<<endl;
+	if(fabs(new_cmd.Position - axis1_setpoint.Position) <= POS_deadsize)
+     {
+       Status = Idel;
+       new_cmd.Response = true;
+       new_cmd.Done = true;
+            }
+			else
+            {
+				if(fabs(new_cmd.Velocity - axis1_setpoint.Velocity) <= V_deadsize)
+                {
+					if(fabs((axis1_setpoint.Velocity * axis1_setpoint.Velocity) / (2*new_cmd.Deceleration)) < fabs(new_cmd.Position - axis1_setpoint.Position))
+                        Status = UniformVelocity;
+					else
+					{
+                        if(axis1_setpoint.Velocity <= 0)
+                            Status = Accelerate;
+                        else
+                            Status = Decelerate;
+                    }                   
+                }
+		else
+                {
+      if(fabs((axis1_setpoint.Velocity * axis1_setpoint.Velocity) / (2*new_cmd.Deceleration)) >= fabs(new_cmd.Position - axis1_setpoint.Position))
+                    {
+                        if(axis1_setpoint.Velocity <= 0)
+                            Status = Accelerate;
+                        else
+                            Status = Decelerate;
+                    }
+                    else if(new_cmd.Velocity > axis1_setpoint.Velocity)
+                        Status = Accelerate;
+                    else
+                        Status = Decelerate;
+                }
+                
+            }
+            
+            switch(Status)
+            {
+                case Accelerate:
+                    //s = s0 +0.5*a*(t^2)+ v0*t 
+                    axis1_setpoint.Position += 0.5*new_cmd.Acceleration * (Delta_time * Delta_time)+axis1_setpoint.Velocity*Delta_time  ;
+                    //v = v0 + a*t
+                    axis1_setpoint.Velocity += new_cmd.Acceleration*Delta_time;
+                    break;
+                case Decelerate:
+                    //s =+s0 - 0.5*Deceleration*(Delta_time^2)+ v0*t 
+                    axis1_setpoint.Position += - 0.5*new_cmd.Deceleration * (Delta_time * Delta_time)+axis1_setpoint.Velocity*Delta_time ;
+                    //v = v0 - a*t
+                    axis1_setpoint.Velocity -= new_cmd.Deceleration*Delta_time;    
+                    break;
+                case UniformVelocity:
+                    //s = s0 + v0*t;
+                    axis1_setpoint.Position += axis1_setpoint.Velocity*Delta_time;
+                    break;
+                case Idel:
+                    break;
+                default:
+                    break;
+            }
+        }
