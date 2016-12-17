@@ -1,5 +1,5 @@
-	#define POS_deadsiz 5
-  #define V_deadsize 5
+ #define POS_deadsiz 5;
+  #define V_deadsize 5;
   double Delta_timeime;
   double Delta_time;
 if(new_cmd.Request)
