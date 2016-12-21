@@ -1,1 +1,27 @@
-struct BALL_parameter{         //冰球的运动参数    double Position_BALL;      //位置    double Velocity_BALL;      //速度};struct BALL_state{        //冰球的状态    bool Request;   //是否接受指指令    bool Done;      //是否已完成运动指令    bool Impact;    //是否接受碰撞的指令};struct impact{           //碰撞指令    double Position;    double Velocity;};class BALL{public:    BALL_state State;                                    //定义数据成员冰球的状态    BALL_parameter Parameter;                            //定义数据成员冰球运动参数    impact Impact;                                       //定义数据成员碰撞指令    void SET_BALL(BALL_state, BALL_parameter, impact);        //冰球初始化函数                                 BALL_state Get_state();                              //返回冰球对象的状态    BALL_parameter Get_parameter();                      //返回冰球对象的参数    impact Get_impact();                                 //返回冰球对象的接受命令参数    void take_order();                                   //执行命令，并及时更新冰球状态};
+struct BALL_parameter{                                   //冰球的运动参数
+    double Position_BALL;                                //位置
+    double Velocity_BALL;                                //速度
+ };
+struct BALL_state{                                       //冰球的状态
+     bool Request;                                       //是否接受指指令
+     bool Done;                                          //是否已完成运动指令
+     bool Impact;                                        //是否接受碰撞的指令
+     };
+struct impact{                                           //碰撞指令
+     double Position;
+     double Velocity
+};
+class BALL
+{
+ public:
+    BALL_state State;                                    //定义数据成员冰球的状态
+    BALL_parameter Parameter;                            //定义数据成员冰球运动参数
+    impact Impact;                                       //定义数据成员碰撞指令
+    void SET_BALL(BALL_state, BALL_parameter, impact);   //冰球初始化函数
+    int path_line()；                                    //冰球的运动轨迹
+    int Imapct_Line()；                                  //冰球碰撞的运动轨迹
+    BALL_state Get_state();                              //返回冰球对象的状态
+    BALL_parameter Get_parameter();                      //返回冰球对象的参数
+    impact Get_impact();                                 //返回冰球对象的接受命令参数
+    void take_order();                                   //执行命令，并及时更新冰球状态
+};
